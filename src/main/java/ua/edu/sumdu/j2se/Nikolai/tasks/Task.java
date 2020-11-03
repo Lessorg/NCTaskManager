@@ -10,23 +10,53 @@ public class Task {
     private boolean active;
     private boolean repeated;
 
+    public Task() {
+        this.start = -1;
+        this.end = -1;
+        this.interval = -1;
+        this.title = "NONE";
+        this.time = -1;
+        this.active = false;
+        this.repeated = false;
+    }
+
     public Task(String title, int time) {
-        start = -1;
-        end = -1;
-        interval = -1;
+        this.start = -1;
+        this.end = -1;
+        this.interval = -1;
         this.title = title;
         this.time = time;
         this.active = false;
         this.repeated = false;
     }
 
+    public Task(String title, int time, boolean active) {
+        this.start = -1;
+        this.end = -1;
+        this.interval = -1;
+        this.title = title;
+        this.time = time;
+        this.active = active;
+        this.repeated = false;
+    }
+
     public Task(String title, int start, int end, int interval) {
-        time = -1;
+        this.time = -1;
         this.title = title;
         this.start = start;
         this.end = end;
         this.interval = interval;
         this.active = false;
+        this.repeated = true;
+    }
+
+    public Task(String title, int start, int end, int interval, boolean active) {
+        this.time = -1;
+        this.title = title;
+        this.start = start;
+        this.end = end;
+        this.interval = interval;
+        this.active = active;
         this.repeated = true;
     }
 
@@ -48,10 +78,10 @@ public class Task {
 
     public int getTime() {
         if (isRepeated()) {
-            return  start;
+            return start;
         }
         else{
-            return  time;
+            return time;
         }
     }
 
@@ -67,25 +97,25 @@ public class Task {
 
     public int getStartTime() {
         if (isRepeated()) {
-            return  start;
+            return start;
         }
         else{
-            return  time;
+            return time;
         }
     }
 
     public int getEndTime() {
         if (isRepeated()) {
-            return  end;
+            return end;
         }
         else {
-            return  time;
+            return time;
         }
     }
 
     public int getRepeatInterval() {
         if (isRepeated()) {
-            return  interval;
+            return interval;
         }
         else {
             return 0;
@@ -119,5 +149,16 @@ public class Task {
             }
         }
         return -1;
+    }
+
+    public boolean equalsTask(Task secondTask){
+
+        return this.time == secondTask.time &&
+                this.title.equals(secondTask.title) &&
+                this.start == secondTask.start &&
+                this.end == secondTask.end &&
+                this.interval == secondTask.interval &&
+                this.active == secondTask.active &&
+                this.repeated == secondTask.repeated;
     }
 }
