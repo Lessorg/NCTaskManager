@@ -1,7 +1,5 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-
-
 public class ArrayTaskList {
 
     private Task[] taskListArray;
@@ -25,9 +23,8 @@ public class ArrayTaskList {
     public boolean remove(Task task){
         for (int i = 0; i < currentSize; i++){
             if (task.equalsTask(taskListArray[i])){
-                for (int j = i; j < currentSize - 1; j++){
-                    taskListArray[j] = taskListArray[j + 1];
-                }
+                if (currentSize - 1 - i >= 0)
+                    System.arraycopy(taskListArray, i + 1, taskListArray, i, currentSize - 1 - i);
 
                 currentSize --;
                 return true;
@@ -41,12 +38,12 @@ public class ArrayTaskList {
         return this.currentSize;
     }
 
-    public Task getTask(int index){
+    public Task getTask(int index) throws IndexOutOfBoundsException{
         if (size() > index && index >= 0){
             return taskListArray[index];
         }
         else{
-            return new Task();
+            throw new IndexOutOfBoundsException("Index out of range: index = " + index);
         }
     }
 

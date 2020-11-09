@@ -20,7 +20,20 @@ public class Task {
         this.repeated = false;
     }
 
-    public Task(String title, int time) {
+    public Task(String title) {
+        this.start = -1;
+        this.end = -1;
+        this.interval = -1;
+        this.title = title;
+        this.time = 0;
+        this.active = false;
+        this.repeated = false;
+    }
+
+    public Task(String title, int time) throws IllegalArgumentException {
+        if (time < 0) {
+            throw new IllegalArgumentException("Negative time:  time = " + time);
+        }
         this.start = -1;
         this.end = -1;
         this.interval = -1;
@@ -30,7 +43,10 @@ public class Task {
         this.repeated = false;
     }
 
-    public Task(String title, int time, boolean active) {
+    public Task(String title, int time, boolean active) throws IllegalArgumentException {
+        if (time < 0) {
+            throw new IllegalArgumentException("Negative time:  time = " + time);
+        }
         this.start = -1;
         this.end = -1;
         this.interval = -1;
@@ -40,7 +56,13 @@ public class Task {
         this.repeated = false;
     }
 
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException{
+        if (start < 0 || start > end) {
+            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
+        }
+        if (interval <= 0) {
+            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
+        }
         this.time = -1;
         this.title = title;
         this.start = start;
@@ -50,7 +72,13 @@ public class Task {
         this.repeated = true;
     }
 
-    public Task(String title, int start, int end, int interval, boolean active) {
+    public Task(String title, int start, int end, int interval, boolean active) throws IllegalArgumentException {
+        if (start < 0 || start > end) {
+            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
+        }
+        if (interval <= 0) {
+            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
+        }
         this.time = -1;
         this.title = title;
         this.start = start;
