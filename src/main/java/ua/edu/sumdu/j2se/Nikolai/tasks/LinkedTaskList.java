@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList{
 
     private Node head;
     private int size;
@@ -8,6 +8,7 @@ public class LinkedTaskList {
     public LinkedTaskList(){
         this.size = 0;
         this.head = null;
+        type = "LINKED";
     }
 
     private class Node {
@@ -20,6 +21,7 @@ public class LinkedTaskList {
         }
     }
 
+    @Override
     public void add(Task task){
         Node newNode = new Node(task);
 
@@ -38,6 +40,7 @@ public class LinkedTaskList {
         size++;
     }
 
+    @Override
     public boolean remove(Task task){
 
         if (head != null){
@@ -71,10 +74,12 @@ public class LinkedTaskList {
         return false;
     }
 
+    @Override
     public int size(){
         return this.size;
     }
 
+    @Override
     public Task getTask(int index) throws IndexOutOfBoundsException{
         if (size > index && index >= 0){
 
@@ -90,24 +95,5 @@ public class LinkedTaskList {
         else{
             throw new IndexOutOfBoundsException("Index out of range: index = " + index);
         }
-    }
-
-    public LinkedTaskList incoming(int from, int to){
-
-        LinkedTaskList incomingTasks = new LinkedTaskList();
-        Node currentNode = head;
-
-        while(currentNode.nextNode != null){
-            int currentTime = from;
-            while(currentNode.task.nextTimeAfter(currentTime) != -1 && currentNode.task.nextTimeAfter(from) < to) {
-                if (currentNode.task.nextTimeAfter(currentTime) <= to) {
-                    incomingTasks.add(currentNode.task);
-                    break;
-                }
-                currentTime = currentNode.task.nextTimeAfter(currentTime);
-            }
-            currentNode = currentNode.nextNode;
-        }
-        return incomingTasks;
     }
 }

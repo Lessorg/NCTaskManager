@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList{
 
     private Task[] taskListArray;
     private int currentSize;
@@ -8,8 +8,10 @@ public class ArrayTaskList {
     public ArrayTaskList(){
         this.taskListArray = new Task[10];
         this.currentSize = 0;
+        type = "ARRAY";
     }
 
+    @Override
     public void add(Task task){
         if(currentSize == taskListArray.length) {
             Task[] tempArray = taskListArray.clone();
@@ -20,6 +22,7 @@ public class ArrayTaskList {
         currentSize++;
     }
 
+    @Override
     public boolean remove(Task task){
         for (int i = 0; i < currentSize; i++){
             if (task.equalsTask(taskListArray[i])){
@@ -34,10 +37,12 @@ public class ArrayTaskList {
         return false;
     }
 
+    @Override
     public int size(){
         return this.currentSize;
     }
 
+    @Override
     public Task getTask(int index) throws IndexOutOfBoundsException{
         if (size() > index && index >= 0){
             return taskListArray[index];
@@ -45,22 +50,5 @@ public class ArrayTaskList {
         else{
             throw new IndexOutOfBoundsException("Index out of range: index = " + index);
         }
-    }
-
-    public ArrayTaskList incoming(int from, int to){
-
-        ArrayTaskList incomingTasks = new ArrayTaskList();
-
-        for (int i = 0; i < size(); i++){
-            int currentTime = from;
-            while(taskListArray[i].nextTimeAfter(currentTime) != -1 && taskListArray[i].nextTimeAfter(from) < to) {
-                if (taskListArray[i].nextTimeAfter(currentTime) <= to) {
-                    incomingTasks.add(taskListArray[i]);
-                    break;
-                }
-                currentTime = taskListArray[i].nextTimeAfter(currentTime);
-            }
-        }
-        return incomingTasks;
     }
 }
