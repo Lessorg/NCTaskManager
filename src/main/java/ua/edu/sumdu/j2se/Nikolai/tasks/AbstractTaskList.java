@@ -1,15 +1,16 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-public abstract class AbstractTaskList {
-    protected String type;
+public abstract class AbstractTaskList implements Iterable<Task>, Cloneable {
+    protected ListTypes.types type;
 
     public abstract void add(Task task);
     public abstract boolean remove(Task task);
     public abstract int size();
     public abstract Task getTask(int index) throws IndexOutOfBoundsException;
+    public abstract String toString();
 
-    public AbstractTaskList incoming(int from, int to) {
-        AbstractTaskList incomingTasks = TaskListFactory.createTaskList(ListTypes.types.valueOf(type));
+    public AbstractTaskList incoming(int from, int to) throws IllegalAccessException {
+        AbstractTaskList incomingTasks = TaskListFactory.createTaskList(type);
 
         for (int i = 0; i < size(); i++){
             int currentTime = from;

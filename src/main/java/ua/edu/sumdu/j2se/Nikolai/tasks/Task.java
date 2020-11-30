@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-public class Task {
+public class Task implements Cloneable{
 
     private int time;
     private int start;
@@ -11,11 +11,11 @@ public class Task {
     private boolean repeated;
 
     public Task() {
+        this.time = -1;
         this.start = -1;
         this.end = -1;
         this.interval = -1;
         this.title = "NONE";
-        this.time = -1;
         this.active = false;
         this.repeated = false;
     }
@@ -86,6 +86,16 @@ public class Task {
         this.interval = interval;
         this.active = active;
         this.repeated = true;
+    }
+
+    public Task(String title, int time, int start, int end, int interval, boolean active) {
+        this.time = time;
+        this.title = title;
+        this.start = start;
+        this.end = end;
+        this.interval = interval;
+        this.active = active;
+        this.repeated = false;
     }
 
     public String getTitle() {
@@ -179,14 +189,51 @@ public class Task {
         return -1;
     }
 
-    public boolean equalsTask(Task secondTask){
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return this.time == task.time &&
+                this.title.equals(task.title) &&
+                this.start == task.start &&
+                this.end == task.end &&
+                this.interval == task.interval &&
+                this.active == task.active &&
+                this.repeated == task.repeated;
+    }
 
-        return this.time == secondTask.time &&
-                this.title.equals(secondTask.title) &&
-                this.start == secondTask.start &&
-                this.end == secondTask.end &&
-                this.interval == secondTask.interval &&
-                this.active == secondTask.active &&
-                this.repeated == secondTask.repeated;
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        hashCode = hashCode + time;
+        hashCode = hashCode + start;
+        hashCode = hashCode + end;
+        hashCode = hashCode + interval;
+        hashCode = hashCode + title.hashCode();
+        hashCode = hashCode + (active ? 1 : 0);
+        hashCode = hashCode + (repeated ? 1 : 0);
+
+        return hashCode;
+    }
+
+    @Override
+    public String toString() {
+        if(isRepeated()) {
+            return("Task " + getTitle() + " time: " + getTime() + " active: " + active + "\n");
+        }
+        else {
+            return("Task " + getTitle() + " StartTime: " + getStartTime() + " EndTime: " + getEndTime() + " Interval: " + getRepeatInterval() + " active: " + active + "\n");
+        }
+    }
+
+    @Override
+    public Task clone() throws CloneNotSupportedException {
+        try {
+            return (Task)super.clone();
+        }
+        catch( CloneNotSupportedException ex ) {
+            throw new CloneNotSupportedException();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
+import java.util.Iterator;
+
 public class LinkedTaskList extends AbstractTaskList{
 
     private Node head;
@@ -8,7 +10,7 @@ public class LinkedTaskList extends AbstractTaskList{
     public LinkedTaskList(){
         this.size = 0;
         this.head = null;
-        type = "LINKED";
+        type = ListTypes.types.LINKED;
     }
 
     private class Node {
@@ -19,6 +21,85 @@ public class LinkedTaskList extends AbstractTaskList{
             this.task = date;
             nextNode = null;
         }
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+
+        return new Iterator<Task>() {
+            Node currentNode = head;
+            Node previousNode = null;
+
+            @Override
+            public boolean hasNext() {
+                return head.nextNode != null && currentNode != null;
+            }
+
+            @Override
+            public Task next() {
+                previousNode = currentNode;
+                currentNode = currentNode.nextNode;
+                return previousNode.task;
+            }
+
+            @Override
+            public void remove() {
+                try {
+                    if(previousNode == null)
+                        throw new IllegalStateException("Illegal State Exception");
+                    LinkedTaskList.this.remove(previousNode.task);
+                }
+                catch (IllegalStateException | UnsupportedOperationException e){
+                    System.out.println(e.getMessage());
+                    throw e;
+                }
+            }
+        };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LinkedTaskList tasks = (LinkedTaskList) o;
+        if(size == tasks.size){
+            if (size == 0)
+                return true;
+            Node currentNode = head;
+            for (Task task:tasks) {
+                if(task.equals(currentNode.task)){
+                    currentNode = currentNode.nextNode;
+                }
+                else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        Iterator i = iterator();
+        while (i.hasNext()) {
+            Object obj = i.next();
+            hashCode = 31*hashCode + (obj==null ? 0 : obj.hashCode());
+        }
+        return hashCode;
+    }
+
+    @Override
+    public LinkedTaskList clone() throws CloneNotSupportedException {
+        LinkedTaskList ResultList;
+        try {
+            ResultList = (LinkedTaskList)super.clone();
+        }
+        catch( CloneNotSupportedException ex ) {
+            throw new CloneNotSupportedException();
+        }
+        return ResultList;
     }
 
     @Override
@@ -48,22 +129,13 @@ public class LinkedTaskList extends AbstractTaskList{
             Node previousNode = head;
 
             for (int i = 0; i < size; i++) {
-                if (task.equalsTask(getTask(i))) {
-                    if (previousNode == currentNode && head.nextNode != null) {
+                if (task.equals(getTask(i))) {
+                    if (previousNode == currentNode) {
                         head = currentNode.nextNode;
                     } else {
                         previousNode.nextNode = currentNode.nextNode;
                     }
                     size--;
-
-                    currentNode = head;
-                    int currentIndex = 0;
-
-                    while(currentNode != null){
-                        System.out.println(currentNode.task.getTitle());
-                        currentNode = currentNode.nextNode;
-                        currentIndex++;
-                    }
 
                     return true;
                 }
@@ -95,5 +167,14 @@ public class LinkedTaskList extends AbstractTaskList{
         else{
             throw new IndexOutOfBoundsException("Index out of range: index = " + index);
         }
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < size(); i++) {
+            result.append(getTask(i).toString());
+        }
+        return result.toString();
     }
 }
