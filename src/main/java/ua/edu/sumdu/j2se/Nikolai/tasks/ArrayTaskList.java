@@ -2,6 +2,7 @@ package ua.edu.sumdu.j2se.Nikolai.tasks;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 public class ArrayTaskList extends AbstractTaskList{
 
@@ -138,5 +139,15 @@ public class ArrayTaskList extends AbstractTaskList{
             result.append(getTask(i).toString());
         }
         return result.toString();
+    }
+
+    @Override
+    public Stream<Task> getStream() {
+        Task[] taskStream = new Task[size()];
+
+        for (int i = 0; i < size(); i++){
+            taskStream[i] = getTask(i);
+        }
+        return Arrays.stream(taskStream);
     }
 }

@@ -1,8 +1,12 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Stream;
 
-public class LinkedTaskList extends AbstractTaskList{
+public class LinkedTaskList extends AbstractTaskList {
 
     private Node head;
     private int size;
@@ -176,5 +180,14 @@ public class LinkedTaskList extends AbstractTaskList{
             result.append(getTask(i).toString());
         }
         return result.toString();
+    }
+
+    @Override
+    public Stream<Task> getStream() {
+        List<Task> list = new LinkedList<>();
+        for (Node i = head; i != null; i = i.nextNode){
+            list.add(i.task);
+        }
+        return list.stream();
     }
 }
