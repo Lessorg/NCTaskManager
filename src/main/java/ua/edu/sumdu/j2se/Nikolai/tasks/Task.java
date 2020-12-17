@@ -1,105 +1,170 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-public class Task implements Cloneable{
+import java.time.LocalDateTime;
+import java.util.Set;
 
-    private int time;
-    private int start;
-    private int end;
+public class Task implements Cloneable {
+
+    private LocalDateTime time;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int interval;
     private String  title;
     private boolean active;
     private boolean repeated;
 
     public Task() {
-        this.time = -1;
-        this.start = -1;
-        this.end = -1;
-        this.interval = -1;
+        this.time = LocalDateTime.MIN;
+        this.start = null;
+        this.end = null;
+        this.interval = 0;
         this.title = "NONE";
         this.active = false;
         this.repeated = false;
     }
 
     public Task(String title) {
-        this.start = -1;
-        this.end = -1;
-        this.interval = -1;
+        this.time = LocalDateTime.MIN;
+        this.start = null;
+        this.end = null;
+        this.interval = 0;
         this.title = title;
-        this.time = 0;
         this.active = false;
         this.repeated = false;
     }
 
-    public Task(String title, int time) throws IllegalArgumentException {
-        if (time < 0) {
-            throw new IllegalArgumentException("Negative time:  time = " + time);
-        }
-        this.start = -1;
-        this.end = -1;
-        this.interval = -1;
-        this.title = title;
+    public Task(String title, LocalDateTime time) {
         this.time = time;
+        this.start = null;
+        this.end = null;
+        this.interval = 0;
+        this.title = title;
         this.active = false;
         this.repeated = false;
     }
 
-    public Task(String title, int time, boolean active) throws IllegalArgumentException {
-        if (time < 0) {
-            throw new IllegalArgumentException("Negative time:  time = " + time);
-        }
-        this.start = -1;
-        this.end = -1;
-        this.interval = -1;
-        this.title = title;
+
+
+    public Task(String title, LocalDateTime time, boolean active) {
         this.time = time;
+        this.start = null;
+        this.end = null;
+        this.interval = 0;
+        this.title = title;
         this.active = active;
         this.repeated = false;
     }
 
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException{
-        if (start < 0 || start > end) {
-            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
-        }
-        if (interval <= 0) {
-            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
-        }
-        this.time = -1;
+    public Task(String title, int time, boolean active) throws IllegalArgumentException{
+        if (time < 0)
+            throw new IllegalArgumentException("time < 0");
+        this.time = LocalDateTime.now().plusHours(time);
+        this.start = null;
+        this.end = null;
+        this.interval = 0;
         this.title = title;
+        this.active = active;
+        this.repeated = false;
+    }
+
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException{
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("Incorrect time: start = " + start.toString() + " end = " + end.toString());
+        }
+        if (interval < 0) {
+            throw new IllegalArgumentException("Too small interval:  interval = " + interval);
+        }
+        this.time = start;
         this.start = start;
         this.end = end;
         this.interval = interval;
+        this.title = title;
         this.active = false;
+        this.repeated = true;
+    }
+
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException{
+        if (start > end || start < 0) {
+            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
+        }
+        if (interval < 0) {
+            throw new IllegalArgumentException("Too small interval:  interval = " + interval);
+        }
+        this.time = LocalDateTime.now().plusHours(start);
+        this.start = LocalDateTime.now().plusHours(start);
+        this.end = LocalDateTime.now().plusHours(end);
+        this.interval = interval;
+        this.title = title;
+        this.active = false;
+        this.repeated = true;
+    }
+
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval, boolean active) throws IllegalArgumentException {
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
+        }
+        if (interval < 0) {
+            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
+        }
+        this.time = start;
+        this.start = start;
+        this.end = end;
+        this.interval = interval;
+        this.title = title;
+        this.active = active;
         this.repeated = true;
     }
 
     public Task(String title, int start, int end, int interval, boolean active) throws IllegalArgumentException {
-        if (start < 0 || start > end) {
+        if (start > end || start < 0) {
             throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
         }
-        if (interval <= 0) {
+        if (interval < 0) {
             throw new IllegalArgumentException("Negative interval:  interval = " + interval);
         }
-        this.time = -1;
-        this.title = title;
-        this.start = start;
-        this.end = end;
+        this.time = LocalDateTime.now().plusHours(start);
+        this.start = LocalDateTime.now().plusHours(start);
+        this.end = LocalDateTime.now().plusHours(end);
         this.interval = interval;
+        this.title = title;
         this.active = active;
         this.repeated = true;
     }
 
-    public Task(String title, int time, int start, int end, int interval, boolean active) {
+    public Task(String title, LocalDateTime time, LocalDateTime start, LocalDateTime end, int interval, boolean active)
+    {
         this.time = time;
-        this.title = title;
         this.start = start;
         this.end = end;
         this.interval = interval;
+        this.title = title;
+        this.active = active;
+        this.repeated = false;
+    }
+
+    public Task(String title, int time, int start, int end, int interval, boolean active)
+            throws IllegalArgumentException{
+        if (start > end || start < 0) {
+            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
+        }
+        if (interval < 0) {
+            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
+        }
+        if (time < 0) {
+            throw new IllegalArgumentException("Negative time:  time = " + interval);
+        }
+
+        this.time = LocalDateTime.now().plusHours(time);
+        this.start = LocalDateTime.now().plusHours(start);
+        this.end = LocalDateTime.now().plusHours(end);
+        this.interval = interval;
+        this.title = title;
         this.active = active;
         this.repeated = false;
     }
 
     public String getTitle() {
-        return  title;
+        return title;
     }
 
     public void setTitle(String title) {
@@ -114,7 +179,7 @@ public class Task implements Cloneable{
         this.active = active;
     }
 
-    public int getTime() {
+    public LocalDateTime  getTime() {
         if (isRepeated()) {
             return start;
         }
@@ -123,17 +188,27 @@ public class Task implements Cloneable{
         }
     }
 
-    public void setTime(int time) {
+    public void setTime(LocalDateTime time) {
         if (isRepeated()) {
-            start = -1;
-            end = -1;
-            interval = -1;
+            start = null;
+            end = null;
+            interval = 0;
             repeated = false;
         }
         this.time = time;
     }
 
-    public int getStartTime() {
+    public void setTime(int time) {
+        if (isRepeated()) {
+            start = null;
+            end = null;
+            interval = 0;
+            repeated = false;
+        }
+        this.time = LocalDateTime.now().plusHours(time);
+    }
+
+    public LocalDateTime getStartTime() {
         if (isRepeated()) {
             return start;
         }
@@ -142,7 +217,7 @@ public class Task implements Cloneable{
         }
     }
 
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         if (isRepeated()) {
             return end;
         }
@@ -161,32 +236,34 @@ public class Task implements Cloneable{
 
     }
 
-    public void setTime(int start, int end, int interval) {
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) {
         this.start = start;
         this.end = end;
         this.interval = interval;
         this.repeated = true;
     }
 
-    public  boolean isRepeated() {
+    public boolean isRepeated() {
         return repeated;
     }
 
-    public int nextTimeAfter(int current) {
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
         if(isActive()) {
             if (isRepeated()) {
-                int temp = start;
-                do {
-                    if (current < temp) {
+                LocalDateTime temp = start;
+                do
+                {
+                    if (current.isBefore(temp)) {
                         return temp;
                     }
-                    temp += interval;
-                } while (temp <= end);
-            } else if (current < time) {
+                    temp = temp.plusSeconds(interval);
+                }
+                while (temp.compareTo(end) <= 0);
+            } else if (current.isBefore(time)){
                 return time;
             }
         }
-        return -1;
+        return null;
     }
 
     @Override
@@ -206,9 +283,9 @@ public class Task implements Cloneable{
     @Override
     public int hashCode() {
         int hashCode = 1;
-        hashCode = hashCode + time;
-        hashCode = hashCode + start;
-        hashCode = hashCode + end;
+        hashCode = hashCode + time.toString().hashCode();
+        hashCode = hashCode + start.toString().hashCode();
+        hashCode = hashCode + end.toString().hashCode();
         hashCode = hashCode + interval;
         hashCode = hashCode + title.hashCode();
         hashCode = hashCode + (active ? 1 : 0);
