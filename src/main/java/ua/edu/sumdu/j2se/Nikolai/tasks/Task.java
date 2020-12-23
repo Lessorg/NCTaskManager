@@ -1,9 +1,11 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
-public class Task implements Cloneable {
+public class Task implements Serializable, Cloneable {
+
+    private static final long serialVersionUID = 2L;
 
     private LocalDateTime time;
     private LocalDateTime start;
@@ -15,8 +17,8 @@ public class Task implements Cloneable {
 
     public Task() {
         this.time = LocalDateTime.MIN;
-        this.start = null;
-        this.end = null;
+        this.start = LocalDateTime.MIN;
+        this.end = LocalDateTime.MIN;
         this.interval = 0;
         this.title = "NONE";
         this.active = false;
@@ -25,42 +27,32 @@ public class Task implements Cloneable {
 
     public Task(String title) {
         this.time = LocalDateTime.MIN;
-        this.start = null;
-        this.end = null;
+        this.start = LocalDateTime.MIN;
+        this.end = LocalDateTime.MIN;
         this.interval = 0;
         this.title = title;
         this.active = false;
         this.repeated = false;
     }
 
-    public Task(String title, LocalDateTime time) {
+    public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+        if (time == null)
+            throw new IllegalArgumentException("time is null");
         this.time = time;
-        this.start = null;
-        this.end = null;
+        this.start = LocalDateTime.MIN;
+        this.end = LocalDateTime.MIN;
         this.interval = 0;
         this.title = title;
         this.active = false;
         this.repeated = false;
     }
 
-
-
-    public Task(String title, LocalDateTime time, boolean active) {
+    public Task(String title, LocalDateTime time, boolean active) throws IllegalArgumentException {
+        if (time == null)
+            throw new IllegalArgumentException("time is null");
         this.time = time;
-        this.start = null;
-        this.end = null;
-        this.interval = 0;
-        this.title = title;
-        this.active = active;
-        this.repeated = false;
-    }
-
-    public Task(String title, int time, boolean active) throws IllegalArgumentException{
-        if (time < 0)
-            throw new IllegalArgumentException("time < 0");
-        this.time = LocalDateTime.now().plusHours(time);
-        this.start = null;
-        this.end = null;
+        this.start = LocalDateTime.MIN;
+        this.end = LocalDateTime.MIN;
         this.interval = 0;
         this.title = title;
         this.active = active;
@@ -68,31 +60,16 @@ public class Task implements Cloneable {
     }
 
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException{
-        if (start.isAfter(end)) {
-            throw new IllegalArgumentException("Incorrect time: start = " + start.toString() + " end = " + end.toString());
+
+        if (start == null || end == null || start.isAfter(end)) {
+            throw new IllegalArgumentException("Incorrect time");
         }
         if (interval < 0) {
             throw new IllegalArgumentException("Too small interval:  interval = " + interval);
         }
-        this.time = start;
+        this.time = LocalDateTime.MIN;
         this.start = start;
         this.end = end;
-        this.interval = interval;
-        this.title = title;
-        this.active = false;
-        this.repeated = true;
-    }
-
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException{
-        if (start > end || start < 0) {
-            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
-        }
-        if (interval < 0) {
-            throw new IllegalArgumentException("Too small interval:  interval = " + interval);
-        }
-        this.time = LocalDateTime.now().plusHours(start);
-        this.start = LocalDateTime.now().plusHours(start);
-        this.end = LocalDateTime.now().plusHours(end);
         this.interval = interval;
         this.title = title;
         this.active = false;
@@ -100,7 +77,7 @@ public class Task implements Cloneable {
     }
 
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval, boolean active) throws IllegalArgumentException {
-        if (start.isAfter(end)) {
+        if (start == null || end == null || start.isAfter(end)) {
             throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
         }
         if (interval < 0) {
@@ -109,22 +86,6 @@ public class Task implements Cloneable {
         this.time = start;
         this.start = start;
         this.end = end;
-        this.interval = interval;
-        this.title = title;
-        this.active = active;
-        this.repeated = true;
-    }
-
-    public Task(String title, int start, int end, int interval, boolean active) throws IllegalArgumentException {
-        if (start > end || start < 0) {
-            throw new IllegalArgumentException("Incorrect time: start = " + start + " end = " + end);
-        }
-        if (interval < 0) {
-            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
-        }
-        this.time = LocalDateTime.now().plusHours(start);
-        this.start = LocalDateTime.now().plusHours(start);
-        this.end = LocalDateTime.now().plusHours(end);
         this.interval = interval;
         this.title = title;
         this.active = active;
@@ -133,6 +94,12 @@ public class Task implements Cloneable {
 
     public Task(String title, LocalDateTime time, LocalDateTime start, LocalDateTime end, int interval, boolean active)
     {
+        if (time == null || start == null || end == null || start.isAfter(end)) {
+            throw new IllegalArgumentException("Incorrect time: time = " + time + " start = " + start + " end = " + end);
+        }
+        if (interval < 0) {
+            throw new IllegalArgumentException("Negative interval:  interval = " + interval);
+        }
         this.time = time;
         this.start = start;
         this.end = end;
@@ -154,9 +121,9 @@ public class Task implements Cloneable {
             throw new IllegalArgumentException("Negative time:  time = " + interval);
         }
 
-        this.time = LocalDateTime.now().plusHours(time);
-        this.start = LocalDateTime.now().plusHours(start);
-        this.end = LocalDateTime.now().plusHours(end);
+        this.time = LocalDateTime.now().plusSeconds(time);
+        this.start = LocalDateTime.now().plusSeconds(start);
+        this.end = LocalDateTime.now().plusSeconds(end);
         this.interval = interval;
         this.title = title;
         this.active = active;
@@ -190,8 +157,8 @@ public class Task implements Cloneable {
 
     public void setTime(LocalDateTime time) {
         if (isRepeated()) {
-            start = null;
-            end = null;
+            start = LocalDateTime.MIN;;
+            end = LocalDateTime.MIN;;
             interval = 0;
             repeated = false;
         }
@@ -200,12 +167,12 @@ public class Task implements Cloneable {
 
     public void setTime(int time) {
         if (isRepeated()) {
-            start = null;
-            end = null;
+            start = LocalDateTime.MIN;;
+            end = LocalDateTime.MIN;;
             interval = 0;
             repeated = false;
         }
-        this.time = LocalDateTime.now().plusHours(time);
+        this.time = LocalDateTime.now().plusSeconds(time);
     }
 
     public LocalDateTime getStartTime() {
@@ -271,10 +238,10 @@ public class Task implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return this.time == task.time &&
+        return this.time.equals(task.time) &&
                 this.title.equals(task.title) &&
-                this.start == task.start &&
-                this.end == task.end &&
+                this.start.equals(task.start) &&
+                this.end.equals(task.end) &&
                 this.interval == task.interval &&
                 this.active == task.active &&
                 this.repeated == task.repeated;

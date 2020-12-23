@@ -1,10 +1,13 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-public abstract class AbstractTaskList implements Iterable<Task>, Cloneable {
+public abstract class AbstractTaskList implements Iterable<Task>, Cloneable, Serializable {
+
     protected ListTypes.types type;
+    protected static final long serialVersionUID = 2L;
 
     public abstract void add(Task task);
     public abstract boolean remove(Task task);
@@ -20,6 +23,4 @@ public abstract class AbstractTaskList implements Iterable<Task>, Cloneable {
 
         return incomingTasks;
     }
-
-
 }

@@ -1,6 +1,5 @@
 package ua.edu.sumdu.j2se.Nikolai.tasks;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class LinkedTaskList extends AbstractTaskList {
         type = ListTypes.types.LINKED;
     }
 
-    private class Node {
+    private static class Node {
         public Task task;
         public Node nextNode;
 
@@ -86,10 +85,8 @@ public class LinkedTaskList extends AbstractTaskList {
     @Override
     public int hashCode() {
         int hashCode = 1;
-        Iterator i = iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            hashCode = 31*hashCode + (obj==null ? 0 : obj.hashCode());
+        for (Object obj : this) {
+            hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
         }
         return hashCode;
     }
